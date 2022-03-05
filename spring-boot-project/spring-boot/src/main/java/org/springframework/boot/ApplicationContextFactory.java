@@ -43,7 +43,9 @@ public interface ApplicationContextFactory {
 	 */
 	ApplicationContextFactory DEFAULT = (webApplicationType) -> {
 		try {
+			// 根据Web环境类型
 			switch (webApplicationType) {
+				// 这里返回的是这个容器
 			case SERVLET:
 				return new AnnotationConfigServletWebServerApplicationContext();
 			case REACTIVE:

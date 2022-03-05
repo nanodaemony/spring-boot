@@ -60,12 +60,19 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
  * @author Stephane Nicoll
  * @since 2.0.0
  */
+// 声明为配置类
 @Configuration(proxyBeanMethods = false)
+// 自动配置优先级最高
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+// ServletRequest存在时才有效
 @ConditionalOnClass(ServletRequest.class)
+// SERVLET环境才装配
 @ConditionalOnWebApplication(type = Type.SERVLET)
+// 启用ServerProperties属性的自动配置
 @EnableConfigurationProperties(ServerProperties.class)
+// 注入几个配置类
 @Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
+		// Tomcat!!!
 		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
 		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,
 		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class })
@@ -118,6 +125,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 				return;
 			}
 			registerSyntheticBeanIfMissing(registry, "webServerFactoryCustomizerBeanPostProcessor",
+					// 进去看看！！！！！
 					WebServerFactoryCustomizerBeanPostProcessor.class,
 					WebServerFactoryCustomizerBeanPostProcessor::new);
 			registerSyntheticBeanIfMissing(registry, "errorPageRegistrarBeanPostProcessor",

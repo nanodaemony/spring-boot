@@ -101,6 +101,7 @@ public class TomcatWebServer implements WebServer {
 		this.tomcat = tomcat;
 		this.autoStart = autoStart;
 		this.gracefulShutdown = (shutdown == Shutdown.GRACEFUL) ? new GracefulShutdown(tomcat) : null;
+		// 初始化Tomcat
 		initialize();
 	}
 
@@ -119,6 +120,7 @@ public class TomcatWebServer implements WebServer {
 					}
 				});
 
+				// 调用Tomcat的启动方法!!!!!
 				// Start the server to trigger initialization listeners
 				this.tomcat.start();
 
@@ -132,6 +134,7 @@ public class TomcatWebServer implements WebServer {
 					// Naming is not enabled. Continue
 				}
 
+				// 重点!!!!创建一个线程
 				// Unlike Jetty, all Tomcat threads are daemon threads. We create a
 				// blocking non-daemon to stop immediate shutdown
 				startDaemonAwaitThread();

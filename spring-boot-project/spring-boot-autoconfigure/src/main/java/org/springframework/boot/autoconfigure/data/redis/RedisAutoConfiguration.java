@@ -44,12 +44,16 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  * @since 1.0.0
  */
 @Configuration(proxyBeanMethods = false)
+// 存在RedisOperations时才装配
 @ConditionalOnClass(RedisOperations.class)
+// Redis属性配置
 @EnableConfigurationProperties(RedisProperties.class)
+// 导入组件
 @Import({ LettuceConnectionConfiguration.class, JedisConnectionConfiguration.class })
 public class RedisAutoConfiguration {
 
 	@Bean
+	// 当有redisTemplate的bean时就不会装配
 	@ConditionalOnMissingBean(name = "redisTemplate")
 	@ConditionalOnSingleCandidate(RedisConnectionFactory.class)
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

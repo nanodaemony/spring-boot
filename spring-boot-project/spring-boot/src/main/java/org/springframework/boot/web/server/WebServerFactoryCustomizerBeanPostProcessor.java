@@ -54,12 +54,17 @@ public class WebServerFactoryCustomizerBeanPostProcessor implements BeanPostProc
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		// BeanPostProcessor可以拦截所有bean的创建
+		// 如果当前的bean是WebServerFactory类型的才生效!!!
 		if (bean instanceof WebServerFactory) {
 			postProcessBeforeInitialization((WebServerFactory) bean);
 		}
 		return bean;
 	}
 
+	/**
+	 * 啥也没干
+	 */
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		return bean;
@@ -67,8 +72,11 @@ public class WebServerFactoryCustomizerBeanPostProcessor implements BeanPostProc
 
 	@SuppressWarnings("unchecked")
 	private void postProcessBeforeInitialization(WebServerFactory webServerFactory) {
+
+		// 这里就是获取容器中的所有定制器，挨着调用定制化方法customize()去定制webServer工厂bean
 		LambdaSafe.callbacks(WebServerFactoryCustomizer.class, getCustomizers(), webServerFactory)
 				.withLogger(WebServerFactoryCustomizerBeanPostProcessor.class)
+				  // 调用定制器的customize()方法,看看实现类：ServletWebServerFactoryCustomizer
 				.invoke((customizer) -> customizer.customize(webServerFactory));
 	}
 

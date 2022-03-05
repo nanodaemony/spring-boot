@@ -62,10 +62,15 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @author Brian Clozel
  * @since 2.0.0
  */
+// 自动配置优先级最高
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+// 配置类
 @Configuration(proxyBeanMethods = false)
+// SERVLET环境下才装配
 @ConditionalOnWebApplication(type = Type.SERVLET)
+// 有DispatcherServlet类才装配
 @ConditionalOnClass(DispatcherServlet.class)
+// 在ServletWebServerFactoryAutoConfiguration工厂自动化配置后才加载
 @AutoConfigureAfter(ServletWebServerFactoryAutoConfiguration.class)
 public class DispatcherServletAutoConfiguration {
 
@@ -79,6 +84,7 @@ public class DispatcherServletAutoConfiguration {
 	 */
 	public static final String DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME = "dispatcherServletRegistration";
 
+	// 配置类
 	@Configuration(proxyBeanMethods = false)
 	@Conditional(DefaultDispatcherServletCondition.class)
 	@ConditionalOnClass(ServletRegistration.class)
@@ -87,6 +93,7 @@ public class DispatcherServletAutoConfiguration {
 
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServlet dispatcherServlet(WebMvcProperties webMvcProperties) {
+			// 初始化DispatcherServlet对象
 			DispatcherServlet dispatcherServlet = new DispatcherServlet();
 			dispatcherServlet.setDispatchOptionsRequest(webMvcProperties.isDispatchOptionsRequest());
 			dispatcherServlet.setDispatchTraceRequest(webMvcProperties.isDispatchTraceRequest());

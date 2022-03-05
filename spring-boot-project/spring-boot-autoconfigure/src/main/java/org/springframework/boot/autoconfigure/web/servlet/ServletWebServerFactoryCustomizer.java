@@ -60,7 +60,10 @@ public class ServletWebServerFactoryCustomizer
 
 	@Override
 	public void customize(ConfigurableServletWebServerFactory factory) {
+
+		// 这里就是读取ServerProperties中配置的各种属性 然后设置到ServerFactory中
 		PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+		// 自定义的port就是在这里配置了
 		map.from(this.serverProperties::getPort).to(factory::setPort);
 		map.from(this.serverProperties::getAddress).to(factory::setAddress);
 		map.from(this.serverProperties.getServlet()::getContextPath).to(factory::setContextPath);

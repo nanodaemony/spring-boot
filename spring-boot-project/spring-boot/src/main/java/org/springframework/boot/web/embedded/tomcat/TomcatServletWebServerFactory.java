@@ -177,25 +177,31 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 		return lifecycleListeners;
 	}
 
+	/** 生成Web服务器对象 */
 	@Override
 	public WebServer getWebServer(ServletContextInitializer... initializers) {
 		if (this.disableMBeanRegistry) {
 			Registry.disableRegistry();
 		}
+		// 创建Tomcat实例
 		Tomcat tomcat = new Tomcat();
+		// 获取Tomcat的baseDir
 		File baseDir = (this.baseDirectory != null) ? this.baseDirectory : createTempDir("tomcat");
 		tomcat.setBaseDir(baseDir.getAbsolutePath());
+		// 创建Tomcat的Connector
 		Connector connector = new Connector(this.protocol);
 		connector.setThrowOnFailure(true);
 		tomcat.getService().addConnector(connector);
 		customizeConnector(connector);
 		tomcat.setConnector(connector);
 		tomcat.getHost().setAutoDeploy(false);
+		// 配置Tomcat的引擎
 		configureEngine(tomcat.getEngine());
 		for (Connector additionalConnector : this.additionalTomcatConnectors) {
 			tomcat.getService().addConnector(additionalConnector);
 		}
 		prepareContext(tomcat.getHost(), initializers);
+		// 包装实例、启动服务器后返回
 		return getTomcatWebServer(tomcat);
 	}
 
@@ -447,6 +453,7 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 	 * @return a new {@link TomcatWebServer} instance
 	 */
 	protected TomcatWebServer getTomcatWebServer(Tomcat tomcat) {
+		// 这里判断一下配置的端口是否大于0
 		return new TomcatWebServer(tomcat, getPort() >= 0, getShutdown());
 	}
 

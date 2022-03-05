@@ -47,6 +47,7 @@ import org.springframework.core.env.Environment;
 public class EmbeddedWebServerFactoryCustomizerAutoConfiguration {
 
 	/**
+	 * 默认Tomcat的
 	 * Nested configuration if Tomcat is being used.
 	 */
 	@Configuration(proxyBeanMethods = false)
